@@ -20,6 +20,7 @@ int sock_fd;
 
 int MAX_T = 1;
 char *BASE_DIR = "/var/www/html";
+int PORT = 5051;
 
 void setnonblocking(int sock_fd) {
   int flags = fcntl(sock_fd, F_GETFL, 0);
@@ -29,7 +30,7 @@ void setnonblocking(int sock_fd) {
 
 void *epoll_wait_loop_accept() {
 
-  int size_of_basedir = strlen(BASE_DIR)+1;
+  int size_of_basedir = strlen(BASE_DIR) + 1;
 
   struct epoll_event *events;
 
@@ -164,12 +165,14 @@ void *epoll_wait_loop_accept() {
 int main(int argc, char *argv[]) {
 
   if (argc <= 1) {
-    printf("default t size %d\n base dir %s=====\n", MAX_T, BASE_DIR);
+    printf("default t size %d\n base dir %s\n=====\n", MAX_T, BASE_DIR);
   } else {
-    int argc = atoi(argv[1]);
-    printf("t size is %d\nbase dir %s\n=====\n", argc, argv[2]);
-    MAX_T = argc;
-    BASE_DIR = argv[2];
+
+    MAX_T = atoi(argv[1]);
+    BASE_DIR = argv[3];
+    PORT = atoi(argv[2]);
+    printf("t size is %d\n port is %d\nbase dir %s\n=====\n", MAX_T, PORT,
+           BASE_DIR);
   }
 
   struct sockaddr_in srvaddr;
